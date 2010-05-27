@@ -8,6 +8,9 @@
     <body>
 	    <div>
 			<?php
+				//lock in lettura sul DB (togliere disp dalla pag prec)
+				//invio richiesta di acquisto al server (che dovrà riverificare info)
+
 				$id = $_GET['id'];
 				$user = 'user';
 				$password = 'password';
@@ -35,14 +38,14 @@
 						<div>
 							<div  style=\"height:200px;border-width:2px;border-color:black;border-style:solid;float:left;margin-left:5%;width:35%;\" id=\"desc\">";
 				echo  $row['descrizione'] . "</div>";
-				echo "<div 						style=\"width:35%;height:200px;border-width:2px;border-color:black;border-style:solid;float:right;margin-right:12.3%;\" id=\"img\"> . <IMG src=\"tavolo.jpg\" height=200px width=200px border=0>";
+				echo "<div 						style=\"width:35%;height:200px;border-width:2px;border-color:black;border-style:solid;float:right;margin-right:12.3%;\" id=\"img\"> . <IMG src=\"" . $row['immagine'] . "\" height=200px width=200px border=0>";
 				echo  "</div><br>";
 				echo "<div style=\"float:left;margin-left:5%;width:35%;\" id=\"prezzo\">
 						<h4>Prezzo:</h4><div style=\"float:left;\">" . $row['prezzo'] . "€ </div></div>";
 				echo "<div style=\"float:left;margin-left:12.6%;width:35%;\" id=\"disp\">
 						<h4>Disponibili:</h4><div style=\"float:left;\">" . $row['disponibili'] . " pezzi</div></div>
 					  </div><br>";
-				echo "<form style=\"float:left;margin-top:5%;margin-left:5%;width:35%;\" name=\"Acquita\" action=\"acuista.php\" method=\"get\">
+				echo "<form style=\"float:left;margin-top:5%;margin-left:5%;width:35%;\" name=\"Acquita\" action=\"acquista.php\" method=\"get\">
 						<input type=\"hidden\" name=\"id\" value=\"" .$row['id']. "\">
 						<input type=\"submit\" value=\"Acquista\">
 					 </form>";

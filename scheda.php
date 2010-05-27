@@ -8,6 +8,9 @@
     <body>
 	    <div>
 			<?php
+				//lock in lettura sul DB (togliere disp dalla pag prec?)
+				//invio richiesta di acquisto al server (che dovrà riverificare info)
+
 				$id = $_GET['id'];
 				$user = 'user';
 				$password = 'password';
@@ -42,7 +45,7 @@
 				echo "<div style=\"float:left;margin-left:12.6%;width:35%;\" id=\"disp\">
 						<h4>Disponibili:</h4><div style=\"float:left;\">" . $row['disponibili'] . " pezzi</div></div>
 					  </div><br>";
-				echo "<form style=\"float:left;margin-top:5%;margin-left:5%;width:35%;\" name=\"Acquita\" action=\"acuista.php\" method=\"get\">
+				echo "<form style=\"float:left;margin-top:5%;margin-left:5%;width:35%;\" name=\"Acquita\" action=\"acquista.php\" method=\"get\">
 						<input type=\"hidden\" name=\"id\" value=\"" .$row['id']. "\">
 						<input type=\"submit\" value=\"Acquista\">
 					 </form>";
