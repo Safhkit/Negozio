@@ -8,6 +8,16 @@
 	<body>
 		<div>
 		<?php
+		$user = 'user';
+		$password = 'password';
+		$link = mysql_connect('localhost', $user, $password);
+		
+		//cancellazione entry scadute		
+		$query = "LOCK TABLES negozio.prenotazioni WRITE;";
+		mysql_query($query, $link);
+		$query = "DELETE FROM negozio.prenotazioni 
+				  WHERE scadenza < CURDATE();";
+		//per l'inserimento in scadenza: DATE_ADD(CURDATE(), INTERVAL 1 HOUR)
 		//lock in scrittura esclusivo
 		//modifica del db (decrementa 'disponibili' di 1)
 		//transazione con la banca
