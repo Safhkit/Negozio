@@ -51,12 +51,16 @@
 				echo $row['prezzo'];
 				echo "</TD><TD>";
 
-				echo "<form name=\"Visualizza\" action=\"scheda.php\"
- 						method=\"get\">
-							<input type=\"hidden\" name=\"id\"
-							value=\"".$row['id']."\">
-							<input type=\"submit\" value=\"Visualizza\">
+				echo "<form name=\"Visualizza\" action=\"scheda.php\" method=\"get\">
+<<<<<<< HEAD
+					  	<input type=\"hidden\" name=\"id\" value=\"".$row['id']."\">
+						<input type=\"submit\" value=\"Visualizza\">
 					  </form>";
+=======
+						<input type=\"hidden\" name=\"id\" value=\"" .$row['id']. "\">
+						<input type=\"submit\" value=\"Visualizza\">
+					 </form>";
+>>>>>>> c151475bad60fc0ed51aef66bfdf8b174b9ac813
 				echo "</TD></TR>";
 			}
 			echo "</table>";

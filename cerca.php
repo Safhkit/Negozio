@@ -52,9 +52,9 @@
 				echo "</TD><TD>";
 
 				echo "<form name=\"Visualizza\" action=\"scheda.php\" method=\"get\">
-					  	<input type=\"hidden\" name=\"id\" value=\"".$row['id']."\">
+						<input type=\"hidden\" name=\"id\" value=\"" .$row['id']. "\">
 						<input type=\"submit\" value=\"Visualizza\">
-					  </form>";
+					 </form>";
 				echo "</TD></TR>";
 			}
 			echo "</table>";
