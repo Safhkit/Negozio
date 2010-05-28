@@ -15,7 +15,7 @@
 		$password = 'password';
 		$link = mysql_connect('localhost', $user, $password);
 		if (!$link)
-			die ('Could not connect: ' . mysql_error() );
+			die ('Could not connect: ' . mysql_error());
 				
 		echo "<br />";
 				
@@ -44,15 +44,29 @@
 		echo "<div style=\"float:left;margin-left:12.6%;width:35%;\" id=\"disp\">
 			  <h4>Disponibili:</h4><div style=\"float:left;\">" . $row['disponibili'] . " pezzi</div></div>
 			  </div><br>";
-		echo "<form style=\"float:left;margin-top:5%;margin-left:5%;width:35%;\" name=\"Acquita\" action=\"acquista.php\" method=\"get\">
+		echo "<form style=\"float:left;margin-top:5%;margin-left:5%;width:35%;\" name=\"Acquista\" action=\"acquista.php\" method=\"get\">
 			  <input type=\"hidden\" name=\"id\" value=\"" .$row['id']. "\">
-			  <input type=\"submit\" value=\"Acquista\">
+			  <b>Quantità</b>
+			  <input type=\"text\" name=\"num\" value=\"1\">
+			  <input type=\"submit\" value=\"Acquista\" onclick=\"return check_disp(".$row['disponibili'].",".$id.");\">
 			  </form>";
-			
+		
 		mysql_free_result($result);
 		mysql_close ($link);
 		?>
 	    </div>
-
+	    <script type="text/javascript">
+	    function check_disp(n, id) {
+		    d = document.Acquista.num.value;
+		    if (d > n) {
+			    alert("La quantità selezionata eccede le disponibilità");
+			    //necessario fare refresh perché nel frattempo la disponibilità
+			    //potrebbe essere cambiata
+			    window.location = "scheda.php?id=" + id;
+			    return false;
+		    }
+		    return true;
+	    }
+	    </script>
 	</body>
 </html>
