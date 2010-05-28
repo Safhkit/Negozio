@@ -8,10 +8,20 @@
     <body>
 	    <div>
 			<?php
-				//lock in scrittura esclusivo
+				//lock in scrittura esclusivo - tab prenotazioni
+				//eliminazione prenotazione scadute
+				//inserimento nuova prenotazione
 				//modifica del db (decrementa 'disponibili' di 1)
+				//unlock
 				//transazione con la banca
 				//
+
+				//lock prod
+				//disp--
+				//unlock prod
+				//lock pren
+				//elimino prenot scadute e aggiungo nuova
+				//unlock pren
 			?>
 	    </div>
 	</body>
