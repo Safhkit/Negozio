@@ -12,11 +12,6 @@ include_once('login.php');
 </head>
 
 <body>
-	<h1>Cerca</h1>
-	<form name="ricerca" action="cerca.php" method="get">
-		Cerca prodotto:
-		<input type="text" name="prodotto" />
-		<input type="submit" value="Avvia" />
-	</form>
+	
 </body>
 </html>
