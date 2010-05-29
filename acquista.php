@@ -1,4 +1,15 @@
 <?php
+	session_start();
+	if (isset($_SESSION['user'])) {
+		echo "User: ".$_SESSION['user']."<br />";
+		echo '<a href="logout.php">logout</a> <br />';
+		echo '<a href="index.php">HOME</a>';
+	}
+	else {
+		header("Location: index.php");
+	}
+?>
+<?php
 function formConferma($id, $num, $l)
 {
 	$query = "SELECT * FROM negozio.prodotti
@@ -66,6 +77,7 @@ function formConferma($id, $num, $l)
 		if (!$result)
 			die ('Invalid query: ' . mysql_error());
 			
+		//controllo per la quantità richiesta dall'utente
 		$query = "SELECT disponibili FROM negozio.prodotti
 				WHERE id =". $id;
 		$result = mysql_query($query, $link);
@@ -78,9 +90,8 @@ function formConferma($id, $num, $l)
 		if ($num <= $row["disponibili"]) {
 			//se la prenotazione esiste già, si incrementa pezzi
 			//altrimenti si inserisce la nuova prenotazione.
-			//TODO: mettere nome utente invece di XXX
 			$query = "SELECT * FROM negozio.prenotazioni
-					where user_id = 'XXX' and prod_id = ".$id.";";
+					where user_id = " .$_SESSION['user']. " and prod_id = ".$id.";";
 			$result = mysql_query($query, $link);
 			if (!$result)
 				die ('Invalid query: ' . mysql_error());
@@ -88,24 +99,23 @@ function formConferma($id, $num, $l)
 			$row = mysql_fetch_assoc($result);
 			if (!$row) {
 				//prenotazione non esisteva
-				//TODO: mettere nome utente invece di XXX
 				$query = "INSERT INTO negozio.prenotazioni
-					values(".$id.", 'XXX', ".$num.", DATE_ADD(NOW(), INTERVAL 1 HOUR));";
+					values(".$id.", ".$_SESSION['user'].", ".$num.", DATE_ADD(NOW(), INTERVAL 1 HOUR));";
 				$result = mysql_query($query, $link);
 				if (!$result)
 					die ('Invalid query: ' . mysql_error());
 			}
 			else {
 				//aggiungere alla prenotazione e rinnovare la scadenza
-				//TODO: mettere nome utente invece di XXX
 				$query = "UPDATE negozio.prenotazioni
 						SET pezzi = pezzi +".$num.", scadenza = DATE_ADD(NOW(), INTERVAL 1 HOUR)
-						WHERE prod_id = ".$id." and user_id = 'XXX';";
+						WHERE prod_id = ".$id." and user_id = ".$_SESSION['user'].";";
 				$result = mysql_query($query, $link);
 				if (!$result)
 					die ('Invalid query: ' . mysql_error());
 			}
 			
+			//decremento dei pezzi prenotati da prodotti
 			$query = "update negozio.prodotti
 					set negozio.prodotti.disponibili = negozio.prodotti.disponibili - ".$num."
 					where negozio.prodotti.id = ".$id.";";

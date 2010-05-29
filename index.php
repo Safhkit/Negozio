@@ -1,6 +1,9 @@
 <?php
 	session_start();
-	if (isset($_POST['username'])) {
+	if (isset($_SESSION['user'])) {
+		header("Location: start.php");
+	}
+	else if (isset($_POST['username'])) {
 		$_SESSION['user'] = $_POST['username'];
 		header("Location: start.php");
 	}
