@@ -21,7 +21,6 @@
 		<?php
 		$id_prod = $_GET['id'];
 		$num = $_GET['num'];
-//$user_name = $_GET['utente'];
 		
 		$user = 'user';
 		$password = 'password';
@@ -42,7 +41,7 @@
 		/*verifica esistenza prenotazione*/
 		//se esiste: avvia transazione con banca; else messaggio all'utente
 		$query = "SELECT * FROM negozio.prenotazioni
-				  WHERE prod_id = ".$id_prod." AND user_id = ".$user;
+				  WHERE prod_id = ".$id_prod." AND user_id = ".$_SESSION['user'];
 
 		$result = mysql_query($query, $link);
 		if (!$result)
@@ -69,7 +68,7 @@
 			if ($esito){
 				//se banca dice OK: elimina prenotazione; unlock; messaggio all'utente
 				$query = "DELETE FROM negozio.prenotazioni
-				  			WHERE prod_id = ".$id_prod." AND user_id = ".$user;
+				  			WHERE prod_id = ".$id_prod." AND user_id = ".$_SESSION['user'];
 
 				$result = mysql_query($query, $link);
 				if (!$result)

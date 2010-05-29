@@ -11,3 +11,4 @@ TODO generali:
 * parti ridondanti in un file da includere
 * negli echo usare '' invece di "", consente di non dover mettere gli escape quando ci sono le ""
 * mettere strict.dtd in tutte le pagine (vedere file vuoto generato da geany)
+* controllare die prima di unlock (die lo fa da solo l'unlock??)
