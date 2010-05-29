@@ -1,3 +1,14 @@
+<?php
+	session_start();
+	if (isset($_SESSION['user'])) {
+		echo "User: ".$_SESSION['user']."<br />";
+		echo '<a href="logout.php">logout</a> <br />';
+		echo '<a href="index.php">HOME</a>';
+	}
+	else {
+		header("Location: index.php");
+	}
+?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -52,7 +63,7 @@
 		else{
 			//transazione con la banca:
 			//la banca risponde in 10 secondi inviando l'esito del pagamento
-			sleep(10);
+			sleep(rand(1,10));
 			//esito pagamento random
 			$esito = rand(0,1);
 			if ($esito){

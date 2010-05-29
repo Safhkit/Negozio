@@ -10,3 +10,4 @@ TODO generali:
 * mettere le parti per la connessione al db in un file da includere
 * parti ridondanti in un file da includere
 * negli echo usare '' invece di "", consente di non dover mettere gli escape quando ci sono le ""
+* mettere strict.dtd in tutte le pagine (vedere file vuoto generato da geany)
