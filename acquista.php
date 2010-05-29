@@ -91,7 +91,7 @@ function formConferma($id, $num, $l)
 			//se la prenotazione esiste già, si incrementa pezzi
 			//altrimenti si inserisce la nuova prenotazione.
 			$query = "SELECT * FROM negozio.prenotazioni
-					where user_id = " .$_SESSION['user']. " and prod_id = ".$id.";";
+					where user_id = '" .$_SESSION['user']. "' and prod_id = ".$id.";";
 			$result = mysql_query($query, $link);
 			if (!$result)
 				die ('Invalid query: ' . mysql_error());
@@ -100,7 +100,7 @@ function formConferma($id, $num, $l)
 			if (!$row) {
 				//prenotazione non esisteva
 				$query = "INSERT INTO negozio.prenotazioni
-					values(".$id.", ".$_SESSION['user'].", ".$num.", DATE_ADD(NOW(), INTERVAL 1 HOUR));";
+					values(".$id.", '".$_SESSION['user']."', ".$num.", DATE_ADD(NOW(), INTERVAL 1 HOUR));";
 				$result = mysql_query($query, $link);
 				if (!$result)
 					die ('Invalid query: ' . mysql_error());
@@ -109,7 +109,7 @@ function formConferma($id, $num, $l)
 				//aggiungere alla prenotazione e rinnovare la scadenza
 				$query = "UPDATE negozio.prenotazioni
 						SET pezzi = pezzi +".$num.", scadenza = DATE_ADD(NOW(), INTERVAL 1 HOUR)
-						WHERE prod_id = ".$id." and user_id = ".$_SESSION['user'].";";
+						WHERE prod_id = ".$id." and user_id = '".$_SESSION['user']."';";
 				$result = mysql_query($query, $link);
 				if (!$result)
 					die ('Invalid query: ' . mysql_error());
