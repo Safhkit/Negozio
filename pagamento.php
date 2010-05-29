@@ -52,7 +52,7 @@
 		else{
 			//transazione con la banca:
 			//la banca risponde in 10 secondi inviando l'esito del pagamento
-			sleep(10);
+			sleep(rand(1,10));
 			//esito pagamento random
 			$esito = rand(0,1);
 			if ($esito){
