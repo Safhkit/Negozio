@@ -3,9 +3,12 @@
 	if (isset($_SESSION['user'])) {
 		header("Location: start.php");
 	}
-	else if (isset($_POST['username'])) {
+	else if (isset($_POST['username'][3])) {
 		$_SESSION['user'] = $_POST['username'];
 		header("Location: start.php");
+	}
+	else {
+		echo "Inserire un username di almeno 4 caratteri";
 	}
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
