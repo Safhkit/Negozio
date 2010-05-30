@@ -84,7 +84,7 @@ include_once('login.php');
 						ancora esistente.</h3>";
 			}
 		}
-		mysql_free_result($result);
+
 		mysql_close ($link);
 		?>
 		</div>

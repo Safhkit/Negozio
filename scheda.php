@@ -61,6 +61,11 @@ include_once('login.php');
 	    <script type="text/javascript">
 	    function check_disp(n, id) {
 		    d = document.Acquista.num.value;
+		    if (d == 0) {
+				alert("Impossibile selezionare 0 pezzi");
+			    window.location = "scheda.php?id=" + id;
+			    return false;
+			}
 		    if (d > n) {
 			    alert("La quantità selezionata eccede le disponibilità");
 			    //necessario fare refresh perché nel frattempo la disponibilità

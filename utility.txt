@@ -14,5 +14,5 @@ TODO generali:
 * controllare die prima di unlock (die lo fa da solo l'unlock??)
 * nella ricerca di un prodotto non viene fatto il lock in lettura, quindi il valore letto di disponibli potrebbe non corrispondere a quello effettivo. Ma questo succederebbe anche usando i lock (qualcuno decrementa il campo subito dopo il rilascio del lock in lettura). Deve essere comunque usato il lock in lettura perché altrimenti si possono verificare errori di consistenza (es. lettura di bit casuali perché qualcuno sta modificando), oppure questo caso è gestito da mysql? N.B.: al momento dell'acquisto il campo disponibili viene comunque riletto, questa volta con lock in scrittura.
 * chiudere le connessioni mysql prima degli errori e sempre prima della fine
-* controllare che gli unlock vengano sempre fatti alla fine di ogni operazione
+* controllare che gli unlock vengano sempre fatti alla fine di ogni operazione (es quando si esce con die)
 * giustificare tutti i lock

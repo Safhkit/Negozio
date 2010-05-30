@@ -24,13 +24,27 @@ if (!$link)
 $id = $_GET['id'];
 
 //Necessario lock in scrittura perché potrebbe essere effettuato contemporanemente un pagamento
-$query = "LOCK TABLES negozio.prenotazioni WRITE;";
+$query = "LOCK TABLES negozio.prenotazioni WRITE, negozio.prodotti WRITE;";
 $result = mysql_query($query, $link);
 if (!$result)
 	die ('Invalid query: ' . mysql_error());
 
+//ripristino delle quantità dell'oggetto eliminato, se la prenotazione è stata cancellata
+//da quando l'utente ha premuto "ELIMINA" a ora, semplicemente non vengono aggiunti pezzi
+//(la routine di cancellazione in acquista.php lo ha già fatto)
+$query = 'UPDATE negozio.prodotti, (
+			SELECT pezzi from negozio.prenotazioni
+			WHERE prod_id = '.$id.' and user_id = "'.$_SESSION["user"].'") as P
+			SET disponibili = disponibili + P.pezzi
+			WHERE id = '.$id.';';
+$result = mysql_query($query, $link);
+if (!$result)
+	die ('Invalid query: ' . mysql_error());
+
+//la prenotazione potrebbe non esserci più se nel frattempo è andata
+//in esecuzione la routine di pulizia. La query semplicemente non ha effetto.
 $query = "DELETE FROM negozio.prenotazioni
-		WHERE user_id = ".$_SESSION['user']." and prod_id=".$id.";";
+		WHERE user_id = '".$_SESSION['user']."' and prod_id=".$id.";";
 $result = mysql_query($query, $link);
 if (!$result)
 	die ('Invalid query: ' . mysql_error());
@@ -39,7 +53,14 @@ $query = "UNLOCK TABLES;";
 $result = mysql_query($query, $link);
 if (!$result)
 	die ('Invalid query: ' . mysql_error());
+	
+//utile solo se il javascript è disabilitato
+echo "Prenotazione eliminata con successo.";
 ?>
+
+<script type="text/javascript">
+location.replace("carrello.php");
+</script>
 	
 </body>
 </html>

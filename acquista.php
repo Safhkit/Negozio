@@ -21,6 +21,7 @@ function formConferma($id, $num, $l)
 	echo "<input type=\"hidden\" name=\"num\" value=\"".$num."\" />";
 	echo "<input type=\"submit\" value=\"Conferma Pagamento\" />";
 	echo "</form>";
+	echo 'Oppure visualizza il <a href="carrello.php">carrello</a>';
 }
 ?>
 
@@ -36,6 +37,9 @@ function formConferma($id, $num, $l)
 		<?php
 		$id = $_GET['id'];
 		$num = $_GET['num'];
+		
+		if ($num == 0)
+			die('Impossibile selezionare 0 pezzi');
 		
 		$user = 'user';
 		$password = 'password';
