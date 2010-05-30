@@ -75,11 +75,11 @@ include_once('login.php');
 		echo "<hr>";
 		echo "<h4 style=\"float:left;margin-left:5%;\">Descrizione:</h4>
 			  <h4 style=\"float:right;margin-right:40%;\">Immagine:</h4>
-			  <br>
+			  
 			  <div>
-			  <div  style=\"height:200px;border-width:2px;border-color:black;border-style:solid;float:left;margin-left:5%;width:35%;\" id=\"desc\">";
+			  <div  style=\"height:140px;border-width:2px;border-color:black;border-style:solid;float:left;margin-left:5%;width:35%;\" id=\"desc\">";
 		echo  $row['descrizione'] . "</div>";
-		echo  "<div style=\"width:35%;height:200px;border-width:2px;border-color:black;border-style:solid;float:right;margin-right:12.3%;\" id=\"img\"> . <IMG src=\"" . $row['immagine'] . "\" height=200px width=200px border=0>";
+		echo  "<div style=\"width:35%;height:140px;border-width:2px;border-color:black;border-style:solid;float:right;margin-right:12.3%;\" id=\"img\"> . <IMG src=\"" . $row['immagine'] . "\" height=140px width=200px border=0>";
 		echo  "</div><br>";
 		echo "<div style=\"float:left;margin-left:5%;width:35%;\" id=\"prezzo\">
 			  <h4>Prezzo:</h4><div style=\"float:left;\">" . $row['prezzo'] . "€ </div></div>";
