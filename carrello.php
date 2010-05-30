@@ -24,6 +24,8 @@ include_once('login.php');
 		die ('Invalid query: ' . mysql_error());*/
 
 	//mostra tutte le prenotazioni dell'utente loggato
+	//non necessario lock perché tanto quando l'utente usa ELIMINA o PAGA dal carrello,
+	//viene sempre riverificata la presenza della entry.
 	$query = "SELECT id, nome, pezzi, prezzo, scadenza FROM negozio.prodotti, negozio.prenotazioni
 				WHERE ((user_id = '".$_SESSION['user']."') AND (id = prod_id))";
 

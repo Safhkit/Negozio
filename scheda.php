@@ -21,7 +21,46 @@ include_once('login.php');
 			die ('Could not connect: ' . mysql_error());
 				
 		echo "<br />";
-				
+		
+		//lock su prenotazioni perché un altro utente potrebbe leggere le stesse entry da
+		//cancellare e ci potrebbero essere corse sulla cancellazione, su prodotti
+		//perché si modifica la disponibilità e non si vuole che qualche utente
+		//la legga in stato inconsistente
+		$query = 'LOCK TABLES negozio.prenotazioni WRITE, negozio.prodotti WRITE;';
+		$result = mysql_query($query, $link);
+		if (!$result)
+			die ('Invalid query: ' . mysql_error());
+		
+		//cancellazione entry scadute e ripristino delle disponibilità in prodotti
+		$now = time();
+		$query = "update negozio.prodotti, (
+				select prod_id, sum(pezzi) as somma
+				from negozio.prenotazioni
+				where scadenza < FROM_UNIXTIME(".$now.")
+				group by prod_id ) as T
+				set negozio.prodotti.disponibili = negozio.prodotti.disponibili + T.somma
+				where negozio.prodotti.id = T.prod_id;";
+		$result = mysql_query($query, $link);
+		if (!$result)
+			die ('Invalid query: ' . mysql_error());
+			
+		$query = "DELETE FROM negozio.prenotazioni 
+				WHERE scadenza < FROM_UNIXTIME(".$now.");";
+		$result = mysql_query($query, $link);
+		if (!$result)
+			die ('Invalid query: ' . mysql_error());
+			
+		$query = 'UNLOCK TABLES';
+		$result = mysql_query($query, $link);
+		if (!$result)
+			die ('Invalid query: ' . mysql_error());
+		
+		//recupero informazioni prodotto selezionato
+		//il campo disponibili potrebbe non essere aggiornato (appena modificato da
+		//un'altra query), ma è inutile prendere il lock, non risolverebbe questo problema
+		//se il campo venisse riscritto subito dopo la lettura.
+		//La consistenza della lettura, anche se è in corso una scrittura, è
+		//garantita da mysql (TODO: verificare quest'ultima frase!)
 		$query = "(select * from negozio.prodotti\n
 				   where id = '$id')";
 				
@@ -29,9 +68,9 @@ include_once('login.php');
 		if (!$result)
 			die ('Invalid query: ' . mysql_error() );
 				
-		//'id' is unique
+		//'id' è unico
 		$row = mysql_fetch_assoc($result);
-		//create a page with product's data
+		//crea pagina con i dati del prodotto
 		echo "<H1>" . $row['nome'] . "</H1>";
 		echo "<hr>";
 		echo "<h4 style=\"float:left;margin-left:5%;\">Descrizione:</h4>

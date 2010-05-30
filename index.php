@@ -8,7 +8,7 @@
 		header("Location: start.php");
 	}
 	else {
-		echo "Inserire un username di almeno 4 caratteri";
+		echo 'Inserire un username di almeno 4 caratteri';
 	}
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"

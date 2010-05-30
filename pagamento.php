@@ -19,12 +19,18 @@ include_once('login.php');
 		$link = mysql_connect('localhost', $user, $password);
 		
 		/*l'utente ha visto il riepilogo delle sue prenotazioni e a quanto
-		//ammonta la cifra da pagare. C'è un pulsante "Conferma pagamento".
+		ammonta la cifra da pagare. C'è un pulsante "Conferma pagamento".
 		Quando viene cliccato:*/
 		//lock su prenotazioni perché occorre vedere se la prenotazione c'è
 		//ancora quando si conferma (non possiamo permettere che venga avviata
 		//la pulizia delle prenotazioni scadute se l'ut. ha confermato il
 		//pagamento subito prima della scadenza)
+		//il lock in lettura non basta perché l'utente potrebbe rivedere
+		//la prenotazione nel suo carrello tra quando conferma il pagamento e quando
+		//questo viene completato.
+		//TODO: però anche se succedesse non ci sarebbero problemi, tanto sia se clicca elimina che
+		//paga, viene riverificata la presenza della prenotazione. Quindi forse basta il
+		//lock in lettura. Problema: qualcun altro può leggere la prenotazione, che poi invece viene cancellata...
 		$query = "LOCK TABLES negozio.prenotazioni WRITE;";
 		$result = mysql_query($query, $link);
 		if (!$result)

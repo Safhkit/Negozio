@@ -44,35 +44,14 @@ function formConferma($id, $num, $l)
 		$user = 'user';
 		$password = 'password';
 		$link = mysql_connect('localhost', $user, $password);
-				
-		//lock su prenotazioni perché un altro utente potrebbe leggere le stesse entry da
-		//cancellare e ci potrebbero essere corse sulla cancellazione, su prodotti
-		//perché si modifica la disponibilità e non si vuole che qualche utente
-		//la legga in stato inconsistente
-		$query = "LOCK TABLES negozio.prenotazioni WRITE, negozio.prodotti WRITE;";
+		
+		//prodotti deve essere aggiornato e disponibili deve rimanere consistente, lock in scrittura
+		//su prenotazioni si fa lettura/scrittura, necessario lock in scrittura
+		$query = 'LOCK TABLES negozio.prodotti WRITE, negozio.prenotazioni WRITE';
 		$result = mysql_query($query, $link);
 		if (!$result)
 			die ('Invalid query: ' . mysql_error());
 		
-		//cancellazione entry scadute e ripristino delle disponibilità in prodotti
-		$now = time();
-		$query = "update negozio.prodotti, (
-				select prod_id, sum(pezzi) as somma
-				from negozio.prenotazioni
-				where scadenza < FROM_UNIXTIME(".$now.")
-				group by prod_id ) as T
-				set negozio.prodotti.disponibili = negozio.prodotti.disponibili + T.somma
-				where negozio.prodotti.id = T.prod_id;";
-		$result = mysql_query($query, $link);
-		if (!$result)
-			die ('Invalid query: ' . mysql_error());
-			
-		$query = "DELETE FROM negozio.prenotazioni 
-				WHERE scadenza < FROM_UNIXTIME(".$now.");";
-		$result = mysql_query($query, $link);
-		if (!$result)
-			die ('Invalid query: ' . mysql_error());
-			
 		//controllo per la quantità richiesta dall'utente
 		$query = "SELECT disponibili FROM negozio.prodotti
 				WHERE id =". $id;
@@ -94,7 +73,7 @@ function formConferma($id, $num, $l)
 			
 			$row = mysql_fetch_assoc($result);
 			if (!$row) {
-				//prenotazione non esisteva
+				//prenotazione non esisteva (il lock in scrittura assicura che nel frattempo non venga inserita una)
 				$query = "INSERT INTO negozio.prenotazioni
 					values(".$id.", '".$_SESSION['user']."', ".$num.", DATE_ADD(NOW(), INTERVAL 1 HOUR));";
 				$result = mysql_query($query, $link);
@@ -102,7 +81,7 @@ function formConferma($id, $num, $l)
 					die ('Invalid query: ' . mysql_error());
 			}
 			else {
-				//aggiungere alla prenotazione e rinnovare la scadenza
+				//aggiungere alla prenotazione e rinnovare la scadenza (lock in scrittura garantisce che non venga mod. entry)
 				$query = "UPDATE negozio.prenotazioni
 						SET pezzi = pezzi +".$num.", scadenza = DATE_ADD(NOW(), INTERVAL 1 HOUR)
 						WHERE prod_id = ".$id." and user_id = '".$_SESSION['user']."';";
@@ -112,6 +91,7 @@ function formConferma($id, $num, $l)
 			}
 			
 			//decremento dei pezzi prenotati da prodotti
+			//il lock garantisce che non sia stato modificato il valore letto all'inizio (non si può avere disp<0)
 			$query = "update negozio.prodotti
 					set negozio.prodotti.disponibili = negozio.prodotti.disponibili - ".$num."
 					where negozio.prodotti.id = ".$id.";";
